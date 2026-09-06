@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .results-container { padding: 20px; text-align: center; }
+    .item-card { display: inline-block; border: 1px solid #ccc; margin: 10px; padding: 10px; width: 180px; text-align: center; }
+    .item-card img { width: 100px; height: 100px; object-fit: contain; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Medan Nusari Enterprise Stationery</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="stationery.html">Stationery</a>
+    <a href="layout.html">Store Layout</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <div class="results-container">
+    <h2>Search Results for: "<span id="searchQuery"></span>"</h2>
+    <div id="resultsList"></div>
+  </div>
+
+  <script>
+  // 1. Senarai data barang anda
+    const products = [
+      { name: "A4 Paper Colour", path: "Section A", image: "images/barang/A4%20COLOUR%20PAPER%20.jpg", link: "a4colourpaper_layout.html" },
+      { name: "Calculator", path: "Section B", image: "images/barang/CALCULATOR.jpg", link: "calculator_layout.html" },
+      { name: "Sticker", path: "Section B", image: "images/barang/STICKER.jpg", link: "sticker_layout.html" },
+      { name: "Pen", path: "Section B", image: "images/barang/PEN.jpg", link: "penpencilmarker_layout.html" },
+      { name: "Pencil", path: "Section B", image: "images/barang/ART%20PENCIL.webp", link: "penpencilmarker_layout.html" },
+      { name: "Marker", path: "Section B", image: "images/barang/MARKER.jpg", link: "penpencilmarker_layout.html" },
+      { name: "Wrapping Paper", path: "Section B", image: "images/barang/WRAPPING%20PAPER.jpg", link: "wrappingpaper_layout.html" },
+      { name: "Button", path: "Section B", image: "images/barang/BUTTON%20_%20BEADS%20.jpg", link: "button_layout.html" },
+      { name: "Pembalut Buku", path: "Section B", image: "images/barang/BOOK%20WRAPPER%20.jpg", link: "pembalutbuku_layout.html" },
+      { name: "Pencil Box", path: "Section C", image: "images/barang/PENCIL%20BOX.jpg", link: "pencilboxdyepowder_layout.html" },
+      { name: "Dye Powder", path: "Section C", image: "images/barang/DYE%20_%20POWDER%20.jpg", link: "pencilboxdyepowder_layout.html" },
+      { name: "Acrylic Colour", path: "Section C", image: "images/barang/ACRYLIC%20PAINT.jpg", link: "acryliccolourmarker_layout.html" },
+      { name: "Acrylic Marker", path: "Section C", image: "images/barang/MARKER.jpg", link: "acryliccolourmarker_layout.html" },
+      { name: "Water Colour", path: "Section C", image: "images/barang/WATERCOLOUR.jpg", link: "watercolourcolourpencilartspencil_layout.html" },
+      { name: "Colour Pencil", path: "Section C", image: "images/barang/COLOUR%20PENCIL.jpg", link: "watercolourcolourpencilartspencil_layout.html" },
+      { name: "Arts Pencil", path: "Section C", image: "images/barang/ART%20PENCIL.webp", link: "watercolourcolourpencilartspencil_layout.html" },
+      { name: "Memo", path: "Section C", image: "images/barang/MEMO.jpg", link: "memonoteindex_layout.html" },
+      { name: "Note", path: "Section C", image: "images/barang/NOTE.jpg", link: "memonoteindex_layout.html" },
+      { name: "Index", path: "Section C", image: "images/barang/INDEX.jpg", link: "memonoteindex_layout.html" },
+      { name: "Folder", path: "Section C", image: "images/barang/FOLDER.webp", link: "folderfilebag_layout.html" },
+      { name: "File", path: "Section C", image: "images/barang/FILE.jpg", link: "folderfilebag_layout.html" },
+      { name: "Bag", path: "Section C", image: "images/barang/BAG.webp", link: "folderfilebag_layout.html" },
+      { name: "Battery", path: "Section C", image: "images/barang/BATTERY.png", link: "battery_layout.html" },
+      { name: "Ruler", path: "Section C", image: "images/barang/RULER.jpg", link: "rulersetsquarecompass_layout.html" },
+      { name: "Set Square", path: "Section C", image: "images/barang/SET%20SQUARE.jpg", link: "rulersetsquarecompass_layout.html" },
+      { name: "Compass", path: "Section C", image: "images/barang/COMPASS.jpg", link: "rulersetsquarecompass_layout.html" },
+      { name: "Highlighter Marker", path: "Section C", image: "images/barang/HIGHLIGHTER.jpg", link: "highlightermarker_layout.html" },
+      { name: "Stapler", path: "Section C", image: "images/barang/STAPLER.png", link: "staplerpuncherclip_layout.html" },
+      { name: "Puncher", path: "Section C", image: "images/barang/PUNCHER.jpg", link: "staplerpuncherclip_layout.html" },
+      { name: "Clip", path: "Section C", image: "images/barang/CLIP.jpg", link: "staplerpuncherclip_layout.html" },
+      { name: "Scissor", path: "Section C", image: "images/barang/SCISSORS.jpg", link: "scissorcutterknife_layout.html" },
+      { name: "Cutter Knife", path: "Section C", image: "images/barang/CUTTER%20KNIFE.webp", link: "scissorcutterknife_layout.html" },
+      { name: "Glue", path: "Section C", image: "images/barang/GLUE.jpg", link: "gluegluestick_layout.html" },
+      { name: "Glue Stick", path: "Section C", image: "images/barang/GLUE%20STICK.jpg", link: "gluegluestick_layout.html" },
+      { name: "Pen Refill", path: "Section C", image: "images/barang/REFILL%20PEN.jpg", link: "penrefillpencilrefill_layout.html" },
+      { name: "Pencil Refill", path: "Section C", image: "images/barang/PENCIL%20REFILL.jpg", link: "penrefillpencilrefill_layout.html" },
+      { name: "Gift", path: "Section C", image: "images/barang/GIFTS.jpg", link: "giftpartytoys_layout.html" },
+      { name: "Party", path: "Section C", image: "images/barang/PARTY.jpg", link: "giftpartytoys_layout.html" },
+      { name: "Toys", path: "Section C", image: "images/barang/TOYS.jpg", link: "giftpartytoys_layout.html" },
+      { name: "Scrapbook", path: "Section C", image: "images/barang/SCRAPBOOK.jpg", link: "scrapbookjurnaldiynotebook_layout.html" },
+      { name: "Jurnal", path: "Section C", image: "images/barang/JOURNAL.jpg", link: "scrapbookjurnaldiynotebook_layout.html" },
+      { name: "DIY Notebook", path: "Section C", image: "images/barang/DIY%20NOTEBOOK.webp", link: "scrapbookjurnaldiynotebook_layout.html" },
+      { name: "Ribbon", path: "Section C", image: "images/barang/RIBBON.jpg", link: "ribbon_layout.html" },
+      { name: "Drawing Paint", path: "Section C", image: "images/barang/DRAWING%20_%20COLOURING%20PAINT.jpg", link: "drawingcolouringbrush_layout.html" },
+      { name: "Painting Brush", path: "Section C", image: "images/barang/BRUSHES.jpg", link: "brushpaintingpallet_layout.html" },
+      { name: "Painting Pallet", path: "Section C", image: "images/barang/PAINTING%20PALLET.jpg", link: "brushpaintingpallet_layout.html" },
+      { name: "Craft Clay", path: "Section C", image: "images/barang/CLAY%20.jpg", link: "craftorigamiclay_layout.html" },
+      { name: "Tape", path: "Section C", image: "images/barang/TAPE.jpg", link: "tapeadhasivetape_layout.html" },
+      { name: "Adhesive Tape", path: "Section C", image: "images/barang/ADHESIVE%20TAPE.jpg", link: "tapeadhasivetape_layout.html" },
+      { name: "Eraser", path: "Section C", image: "images/barang/ERASER.webp", link: "erasercorrectiontape_layout.html" },
+      { name: "Correction Tape", path: "Section C", image: "images/barang/CORRECTION.jpg", link: "erasercorrectiontape_layout.html" },
+      { name: "Pencil Lead", path: "Section C", image: "images/barang/PENCIL%20REFILL.jpg", link: "pencillead_layout.html" },
+      { name: "Young Adult Book", path: "Section D", image: "images/barang/YOUNG%20ADULT.jpg", link: "youngadultfictionnonfiction_layout.html" },
+      { name: "Fiction Book", path: "Section D", image: "images/barang/FICTION.jpg", link: "youngadultfictionnonfiction_layout.html" },
+      { name: "Non-Fiction Book", path: "Section D", image: "images/barang/NON%20FICTION%20BOOKS.jpg", link: "youngadultfictionnonfiction_layout.html" },
+      { name: "Animals Toys", path: "Section D", image: "images/barang/ANIMAL%20TOYS.jpg", link: "animaltoys_layout.html" },
+      { name: "Card Holder", path: "Section D", image: "images/barang/CARD%20HOLDER.png", link: "cardholder_layout.html" },
+      { name: "Gift Wrap", path: "Section D", image: "images/barang/GIFT%20WRAP.jpg", link: "giftwrapbox_layout.html" },
+      { name: "Gift Box", path: "Section D", image: "images/barang/GIFT%20BOX.jpg", link: "giftwrapbox_layout.html" },
+      { name: "Colouring Book", path: "Section D", image: "images/barang/COLORING%20BOOK.png", link: "colouringbook_layout.html" },
+      { name: "Creative Paper", path: "Section D", image: "images/barang/CREATIVE%20PAPER.jpg", link: "creativepaper_layout.html" },
+      { name: "Sticker Paper", path: "Section D", image: "images/barang/STICKER%20PAPER.jpg", link: "stickercolourpaper_layout.html" },
+      { name: "Colour Paper", path: "Section D", image: "images/barang/COLOUR%20PAPER.png", link: "stickercolourpaper_layout.html" },
+      { name: "Artwork Book", path: "Section D", image: "images/barang/ARTWORK%20BOOK.jpg", link: "artworkdrawingbook_layout.html" },
+      { name: "Drawing Book", path: "Section D", image: "images/barang/DRAWING%20BOOK.png", link: "artworkdrawingbook_layout.html" },
+      { name: "555 Book", path: "Section D", image: "images/barang/555%20NOTE.png", link: "555booknotememopad_layout.html" },
+      { name: "Note", path: "Section D", image: "images/barang/NOTE.jpg", link: "555booknotememopad_layout.html" },
+      { name: "Memo Pad", path: "Section D", image: "images/barang/MEMO%20PAD.jpg", link: "555booknotememopad_layout.html" },
+      { name: "Book Mark", path: "Section D", image: "images/barang/BOOKMARK.png", link: "bookmark_layout.html" },
+      { name: "Thread", path: "Section E", image: "images/barang/THREAD.jpg", link: "thread_layout.html" },
+      { name: "Guitar", path: "Section E", image: "images/barang/GUITAR.png", link: "guitarfilm_layout.html" },
+      { name: "Film", path: "Section E", image: "images/barang/FILM.jpg", link: "guitarfilm_layout.html" },
+      { name: "Envelope", path: "Section E", image: "images/barang/ENVELOPE.jpg", link: "envelope_layout.html" },
+      { name: "Bill Book", path: "Section E", image: "images/barang/BILL%20BOOK.png", link: "billbookclipboard_layout.html" },
+      { name: "Clipboard", path: "Section E", image: "images/barang/CLIPBOARD.png", link: "billbookclipboard_layout.html" },
+      { name: "File Holder", path: "Section E", image: "images/barang/FILE%20HOLDER.png", link: "fileholder_layout.html" },
+      { name: "Laminating", path: "Section E", image: "images/barang/LAMINATING%20FILM.jpg", link: "laminatingfilebinder_layout.html" },
+      { name: "File", path: "Section E", image: "images/barang/FILE.jpg", link: "laminatingfilebinder_layout.html" },
+      { name: "Binder", path: "Section E", image: "images/barang/BINDER.png", link: "laminatingfilebinder_layout.html" },
+      { name: "Paper Bag", path: "Section F", image: "images/barang/PAPER%20BAG.jpg", link: "paperbagpencilcase_layout.html" },
+      { name: "Pencil Case", path: "Section F", image: "images/barang/PENCIL%20CASE.jpg", link: "paperbagpencilcase_layout.html" },
+      { name: "ABC Polystyrene", path: "Section F", image: "images/barang/ABC%20POLYSTRENE.png", link: "abcpolystyrene_layout.html" },
+      { name: "Flag", path: "Section G", image: "images/barang/HANGING%20FLAG.jpg", link: "flagsikatpayung_layout.html" },
+      { name: "Sikat", path: "Section G", image: "images/barang/COMB%20.jpg", link: "flagsikatpayung_layout.html" },
+      { name: "Payung", path: "Section G", image: "images/barang/UMBRELLA.jpg", link: "flagsikatpayung_layout.html" },
+      { name: "Cardboard", path: "Section G", image: "images/barang/CARDBOARD.jpg", link: "cardboard_layout.html" },
+      { name: "Paper Bundle", path: "Section G", image: "images/barang/PAPER%20BUNDLE.jpg", link: "paperbundle_layout.html" }
+    ];
+
+    // 2. Ambil perkataan carian dari URL (contoh: search.html?query=pen)
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('query')?.toLowerCase() || "";
+
+    document.getElementById('searchQuery').textContent = query;
+
+    // 3. Tapis barang dan paparkan
+    const resultsContainer = document.getElementById('resultsList');
+    const filteredProducts = products.filter(item => item.name.toLowerCase().includes(query) || item.path.toLowerCase().includes(query));
+
+    if (filteredProducts.length > 0 && query !== "") {
+      filteredProducts.forEach(item => {
+        resultsContainer.innerHTML += `
+          <div class="item-card">
+            <a href="${item.link}"><strong>${item.name}</strong></a><br>
+            <small>Path: ${item.path}</small><br>
+            <img src="${item.image}" alt="${item.name}">
+          </div>
+        `;
+      });
+    } else {
+      resultsContainer.innerHTML = "<p>No matching stationery found.</p>";
+    }
+  </script>
+
+</body>
+</html>
